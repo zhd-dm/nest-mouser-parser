@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "parser:start": "nx serve parser",
-    "mouser:swagger-generate": ""
+    "mouser:swaggerV1-generate": "openapi --input https://api.mouser.com/api/docs/V1 --output ./libs/mouser-swagger/src/lib/generated --client node --exportCore false --exportServices false --indent 2"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +36,7 @@
     "jest": "^29.4.1",
     "jest-environment-node": "^29.4.1",
     "nx": "15.9.7",
+    "openapi-typescript-codegen": "^0.25.0",
     "prettier": "^2.6.2",
     "prisma": "^5.3.1",
     "ts-jest": "^29.0.5",
