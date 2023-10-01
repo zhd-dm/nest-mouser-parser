@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "parser:start": "nx serve parser",
-    "mouser:swaggerV1-generate": "openapi --input https://api.mouser.com/api/docs/V1 --output ./libs/mouser-swagger/src/lib/generated --client node --exportCore false --exportServices false --indent 2"
+    "mouser:swaggerV1-generate": "openapi --input https://api.mouser.com/api/docs/V1 --output ./libs/mouser-swagger/src/lib/generated --client node --exportCore false --exportServices false --indent 2",
+    "prisma:migrate-dev": "npx prisma migrate dev"
   },
   "private": true,
   "dependencies": {
