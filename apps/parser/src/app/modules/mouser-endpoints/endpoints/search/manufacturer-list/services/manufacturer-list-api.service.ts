@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { map, Observable } from 'rxjs';
 
-import { MouserManufacturersRoot } from '@mouser-swagger';
 import { MouserConnectionService } from '../../../../services/mouser-connection.service';
+import { MouserManufacturersRoot } from '@mouser-swagger/v1';
 
 @Injectable()
 export class ManufacturerListApiService {

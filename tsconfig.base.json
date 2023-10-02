@@ -18,8 +18,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mouser-swagger": [
-        "libs/mouser-swagger/src/index.ts"
+      "@mouser-swagger/v1": [
+        "libs/mouser-swagger/src/lib/generated/v1/index.ts"
+      ],
+      "@mouser-swagger/v2": [
+        "libs/mouser-swagger/src/lib/generated/v2/index.ts"
       ]
     }
   },
