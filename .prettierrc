@@ -1,6 +1,6 @@
 {
   "printWidth": 120,
-  "singleQuote": false,
+  "singleQuote": true,
   "overrides": [
     {
       "files": ["*.ts", "*.json"],

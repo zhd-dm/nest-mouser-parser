@@ -1,17 +1,17 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
-import { ManufacturerListHandlerModule } from './modules/manufacturer-list-handler/manufacturer-list-handler.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoints.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env.development', '.env.production'],
-      isGlobal: true
+      isGlobal: true,
     }),
-    ManufacturerListHandlerModule
+    MouserEndpointsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
