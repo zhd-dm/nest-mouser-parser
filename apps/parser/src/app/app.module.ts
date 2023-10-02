@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoints.module';
+import { HtmlParserModule } from './modules/html-parser/html-parser.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoin
       isGlobal: true,
     }),
     MouserEndpointsModule,
+    HtmlParserModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],

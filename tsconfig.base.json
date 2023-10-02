@@ -14,6 +14,7 @@
       "es2017",
       "dom"
     ],
+    "strict": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
