@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { ManufacturerListHandlerModule } from './endpoints/search/manufacturer-list-handler/manufacturer-list-handler.module';
+import { ManufacturerListModule } from './endpoints/search/manufacturer-list/manufacturer-list.module';
 
 @Module({
-  imports: [ManufacturerListHandlerModule]
+  imports: [ManufacturerListModule]
 })
 export class MouserEndpointsModule {}

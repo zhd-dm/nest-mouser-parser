@@ -15,7 +15,7 @@ export class ManufacturerListApiService {
   getManufactures(): Observable<MouserManufacturersRoot> {
     return this.httpService
       .get<MouserManufacturersRoot>(
-        `${this.mouserConnectionService.apiUrl}/search/manufacturerlist?apiKey=${this.mouserConnectionService.apiKey}`,
+        `${this.mouserConnectionService.apiV2Url}/search/manufacturerlist?apiKey=${this.mouserConnectionService.apiKey}`,
       )
       .pipe(map(({ data }) => data));
   }

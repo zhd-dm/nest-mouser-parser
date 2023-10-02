@@ -10,4 +10,4 @@ import { MouserConnectionService } from '../../../services/mouser-connection.ser
   controllers: [ManufacturerListApiController],
   providers: [MouserConnectionService, ManufacturerListApiService],
 })
-export class ManufacturerListHandlerModule {}
+export class ManufacturerListModule {}
