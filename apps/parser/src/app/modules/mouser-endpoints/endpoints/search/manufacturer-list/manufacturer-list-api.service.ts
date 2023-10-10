@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { map, Observable } from 'rxjs';
 
-import { MouserConnectionService } from '../../../../services/mouser-connection.service';
+import { MouserConnectionService } from '../../../services/mouser-connection.service';
 import { MouserManufacturersRoot } from '@mouser-swagger/v1';
 
 @Injectable()
