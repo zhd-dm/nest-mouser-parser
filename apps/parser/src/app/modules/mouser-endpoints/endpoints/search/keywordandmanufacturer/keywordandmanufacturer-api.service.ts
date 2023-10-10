@@ -15,11 +15,13 @@ export class KeywordandmanufacturerApiService {
   ) {}
 
   postKeywordandmanufacturer(dto: KeywordandmanufacturerDto): Observable<SearchResponseRoot> {
+    const apiV2Url = this.mouserConnectionService.apiV2Url;
+    const apiKey = this.mouserConnectionService.apiKey;
+
     return this.httpService
-      .post<SearchResponseRoot>(
-        `${this.mouserConnectionService.apiV2Url}/${SEARCH_BASE_ENDPOINT}/${KEYWORD_AND_MANUFACTURER}?apiKey=${this.mouserConnectionService.apiKey}`,
-        { SearchByKeywordMfrNameRequest: dto },
-      )
+      .post<SearchResponseRoot>(`${apiV2Url}/${SEARCH_BASE_ENDPOINT}/${KEYWORD_AND_MANUFACTURER}?apiKey=${apiKey}`, {
+        SearchByKeywordMfrNameRequest: dto,
+      })
       .pipe(map(({ data }) => data));
   }
 }

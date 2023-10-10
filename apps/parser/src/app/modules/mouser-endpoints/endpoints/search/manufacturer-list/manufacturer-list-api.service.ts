@@ -14,10 +14,11 @@ export class ManufacturerListApiService {
   ) {}
 
   getManufactures(): Observable<MouserManufacturersNameRoot> {
+    const apiV2Url = this.mouserConnectionService.apiV2Url;
+    const apiKey = this.mouserConnectionService.apiKey;
+
     return this.httpService
-      .get<MouserManufacturersNameRoot>(
-        `${this.mouserConnectionService.apiV2Url}/${SEARCH_BASE_ENDPOINT}/${MANUFACTURER_LIST}?apiKey=${this.mouserConnectionService.apiKey}`,
-      )
+      .get<MouserManufacturersNameRoot>(`${apiV2Url}/${SEARCH_BASE_ENDPOINT}/${MANUFACTURER_LIST}?apiKey=${apiKey}`)
       .pipe(map(({ data }) => data));
   }
 }
