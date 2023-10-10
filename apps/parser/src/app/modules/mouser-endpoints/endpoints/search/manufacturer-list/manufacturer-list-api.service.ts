@@ -3,7 +3,8 @@ import { HttpService } from '@nestjs/axios';
 import { map, Observable } from 'rxjs';
 
 import { MouserConnectionService } from '../../../services/mouser-connection.service';
-import { MouserManufacturersRoot } from '@mouser-swagger/v1';
+import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
+import { MANUFACTURER_LIST, SEARCH_BASE_ENDPOINT } from '../search-endpoint.consts';
 
 @Injectable()
 export class ManufacturerListApiService {
@@ -12,10 +13,10 @@ export class ManufacturerListApiService {
     private readonly mouserConnectionService: MouserConnectionService,
   ) {}
 
-  getManufactures(): Observable<MouserManufacturersRoot> {
+  getManufactures(): Observable<MouserManufacturersNameRoot> {
     return this.httpService
-      .get<MouserManufacturersRoot>(
-        `${this.mouserConnectionService.apiV2Url}/search/manufacturerlist?apiKey=${this.mouserConnectionService.apiKey}`,
+      .get<MouserManufacturersNameRoot>(
+        `${this.mouserConnectionService.apiV2Url}/${SEARCH_BASE_ENDPOINT}/${MANUFACTURER_LIST}?apiKey=${this.mouserConnectionService.apiKey}`,
       )
       .pipe(map(({ data }) => data));
   }
