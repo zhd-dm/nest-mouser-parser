@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { ManufacturerListTableService } from './tables/manufacturer-list-table.service';
-import { PrismaService } from '../prisma/prisma.service';
+import { ManufacturerListTableModule } from './tables/manufacturer-list-table.module';
 
 @Module({
-  controllers: [],
-  providers: [PrismaService, ManufacturerListTableService],
+  imports: [ManufacturerListTableModule]
 })
 export class DbDataHandlerModule {}
