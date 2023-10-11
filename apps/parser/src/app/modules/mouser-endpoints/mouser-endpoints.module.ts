@@ -4,6 +4,6 @@ import { ManufacturerListModule } from './endpoints/search/manufacturer-list/man
 import { KeywordandmanufacturerModule } from './endpoints/search/keywordandmanufacturer/keywordandmanufacturer.module';
 
 @Module({
-  imports: [ManufacturerListModule, KeywordandmanufacturerModule]
+  imports: [ManufacturerListModule, KeywordandmanufacturerModule],
 })
 export class MouserEndpointsModule {}

@@ -1,3 +1,4 @@
+// TODO: доработать
 export interface CrudModel {
   create<T, R>(args: T): R;
   getAll<T, R>(args: T): R;

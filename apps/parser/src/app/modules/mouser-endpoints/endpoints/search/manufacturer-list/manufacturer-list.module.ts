@@ -9,5 +9,6 @@ import { MouserConnectionService } from '../../../services/mouser-connection.ser
   imports: [HttpModule],
   controllers: [ManufacturerListApiController],
   providers: [MouserConnectionService, ManufacturerListApiService],
+  exports: [ManufacturerListApiService],
 })
 export class ManufacturerListModule {}

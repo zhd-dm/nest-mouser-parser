@@ -8,6 +8,7 @@ import { MouserConnectionService } from '../../../services/mouser-connection.ser
 @Module({
   imports: [HttpModule],
   controllers: [KeywordandmanufacturerApiController],
-  providers: [MouserConnectionService, KeywordandmanufacturerApiService]
+  providers: [MouserConnectionService, KeywordandmanufacturerApiService],
+  exports: [KeywordandmanufacturerApiService]
 })
 export class KeywordandmanufacturerModule {}
