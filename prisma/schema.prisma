@@ -13,21 +13,79 @@ datasource db {
 model ManufacturerNames {
   automatically_id  Int      @id @default(autoincrement())
   manufacturer_name String   @unique @db.VarChar(100)
-  last_updated      DateTime @db.Date
+  last_updated      DateTime @db.Date // TODO: timestamp	DateTime	✔️	@db.TimeStamp
 }
 
-// model User {
-//   id    Int     @id @default(autoincrement())
-//   email String  @unique
-//   name  String?
-//   posts Post[]
-// }
-//
-// model Post {
-//   id        Int     @id @default(autoincrement())
-//   title     String
-//   content   String?
-//   published Boolean @default(false)
-//   author    User    @relation(fields: [authorId], references: [id])
-//   authorId  Int
-// }
+model ParsedProducts {
+  availability             String                @db.VarChar(50)
+  data_sheet_url           String                @db.VarChar(200)
+  descriprion              String                @db.VarChar(300)
+  factory_stock            Int // Понять что это
+  image_path               String?               @db.VarChar(200)
+  category                 String                @db.VarChar(100) // Enum, понять какие категории существуют
+  lead_time                Int
+  lifecycle_status         String?               @db.VarChar(50) // Enum, понять какие статусы существуют
+  manufacturer             String                @db.VarChar(100) // Enum производителя + нужно смаппить, т.к. 3M === 3M Electronic Solutions Division
+  manufacturer_part_number String                @db.VarChar(50)
+  min                      Int
+  mult                     Int
+  mouser_part_number       String                @id @db.VarChar(50)
+  product_attributes       ProductAttribute[]
+  price_breaks             PriceBreak[]
+  alternate_packagings     AlternatePackaging[]
+  product_detail_url       String                @db.VarChar(200)
+  reeling                  Boolean
+  rohs_status              String                @db.VarChar(50)
+  suggested_replacement    String                @db.VarChar(100)
+  multi_sim_blue           Int
+  availability_in_stock    Int
+  availability_on_order    AvailabilityOnOrder[]
+  info_messages            String[]              @db.VarChar(300)
+  product_compliance       ProductCompliance[]
+}
+
+model ProductAttribute {
+  automatically_id                 Int             @id @default(autoincrement())
+  attribute_name                   String          @db.VarChar(100)
+  attribute_value                  String          @db.VarChar(50) // Может быть как числом, так и строкой, например Bulk
+  attribute_cost                   String          @db.VarChar(100)
+  ParsedProducts                   ParsedProducts? @relation(fields: [parsedProductsMouser_part_number], references: [mouser_part_number])
+  parsedProductsMouser_part_number String?         @db.VarChar(50)
+}
+
+model PriceBreak {
+  automatically_id                 Int             @id @default(autoincrement())
+  quantity                         Int
+  price                            String          @db.VarChar(50)
+  currency                         Currency
+  ParsedProducts                   ParsedProducts? @relation(fields: [parsedProductsMouser_part_number], references: [mouser_part_number])
+  parsedProductsMouser_part_number String?         @db.VarChar(50)
+}
+
+model AvailabilityOnOrder {
+  automatically_id                 Int             @id @default(autoincrement())
+  quantity                         Int
+  date                             DateTime        @db.Date
+  ParsedProducts                   ParsedProducts? @relation(fields: [parsedProductsMouser_part_number], references: [mouser_part_number])
+  parsedProductsMouser_part_number String?         @db.VarChar(50)
+}
+
+model ProductCompliance {
+  automatically_id                 Int             @id @default(autoincrement())
+  compliance_name                  String          @db.VarChar(50)
+  compliance_value                 String          @db.VarChar(100)
+  ParsedProducts                   ParsedProducts? @relation(fields: [parsedProductsMouser_part_number], references: [mouser_part_number])
+  parsedProductsMouser_part_number String?         @db.VarChar(50)
+}
+
+model AlternatePackaging {
+  automatically_id                 Int             @id @default(autoincrement())
+  APMfrPN                          String?         @db.VarChar(100)
+  ParsedProducts                   ParsedProducts? @relation(fields: [parsedProductsMouser_part_number], references: [mouser_part_number])
+  parsedProductsMouser_part_number String?         @db.VarChar(50)
+}
+
+enum Currency {
+  USD
+  EUR
+}
