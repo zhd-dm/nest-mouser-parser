@@ -27,7 +27,12 @@ export class ManufacturerListTableService {
 
   // delete(): any {}
 
-  private async getManufacturesCount(): Promise<number> {
-    return this.prismaService.manufacturerList.count();
+  getManufacturesCount(): Observable<number> {
+    return from(this.prismaService.manufacturerList.count());
+  }
+
+  truncateTable(): Observable<Prisma.BatchPayload> {
+    // TODO: truncate
+    return from(this.prismaService.manufacturerList.deleteMany({ where: {}}))
   }
 }

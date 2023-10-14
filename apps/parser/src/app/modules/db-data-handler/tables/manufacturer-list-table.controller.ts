@@ -1,13 +1,11 @@
 import { Controller, Post } from '@nestjs/common';
-import { catchError, forkJoin, map } from 'rxjs';
+import { combineLatest, forkJoin, of, switchMap } from 'rxjs';
 
 import { ManufacturerListTableService } from './manufacturer-list-table.service';
-import {
-  ManufacturerListApiService
-} from '../../mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
-import { MouserManufacturerName, MouserManufacturersNameRoot } from '@mouser-swagger/v2';
-import { ManufacturerList, Prisma } from '@prisma/client';
-import { MouserAndDbTableManufacturesObject } from './manufacturer-list-table.types';
+import { ManufacturerListApiService } from '../../mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
+import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
+import { Prisma } from '@prisma/client';
+import { RequiredMouserManufacturerName } from './manufacturer-list-table.types';
 
 @Controller('admin/manufacturerlist-table')
 export class ManufacturerListTableController {
@@ -16,55 +14,56 @@ export class ManufacturerListTableController {
     private readonly manufacturerListApiService: ManufacturerListApiService,
   ) {}
 
-
   // TODO: Responses !!!
   @Post()
   updateManufactureTable() {
-    // TODO: проверять не по количеству в базе, а каждую запись сравнивать с ответом от mouser
-
     return forkJoin([
       this.manufacturerListApiService.getManufactures(),
-      this.manufacturerListTableService.getAll()
+      this.manufacturerListTableService.getManufacturesCount(),
     ]).pipe(
-      map(([mouserManufactures, dbTableManufactures]) => this.checkAndGetManufacturesObject(mouserManufactures, dbTableManufactures)),
-      map(mouserAndDbTableManufactures => this.writeManufacturesToDb(mouserAndDbTableManufactures)),
-      catchError(err => err)
-    )
+      switchMap(([mouserManufactures, dbManufacturesCount]) => {
+        if (!this.isManufacturesAndCountNotEquals(mouserManufactures, dbManufacturesCount))
+          return of('Нечего обновлять. Количество мануфактур равно.');
+
+        const mouserManufactureNames = mouserManufactures?.MouserManufacturerList?.ManufacturerList ?? [];
+        return combineLatest([
+          this.manufacturerListTableService.truncateTable(),
+          this.writeManufactureNamesToDb(mouserManufactureNames as RequiredMouserManufacturerName[]),
+        ]);
+      }),
+    );
   }
 
-  private checkAndGetManufacturesObject(
+  private isManufacturesAndCountNotEquals(
     mouserManufactures: MouserManufacturersNameRoot,
-    dbTableManufactures: ManufacturerList[]
-  ): MouserAndDbTableManufacturesObject | null {
-    return this.isEqualManufacturesLength(mouserManufactures, dbTableManufactures)
-      ? null
-      : {
-        mouserManufactures: mouserManufactures.MouserManufacturerList?.ManufacturerList ?? null,
-        dbTableManufactures: dbTableManufactures ?? null
-      }
+    dbManufacturesCount: number,
+  ): boolean {
+    return !(
+      !!mouserManufactures.MouserManufacturerList &&
+      mouserManufactures.MouserManufacturerList?.Count === dbManufacturesCount
+    );
   }
 
-  private isEqualManufacturesLength(mouserManufactures: MouserManufacturersNameRoot, dbTableManufactures: ManufacturerList[]): boolean {
-    return mouserManufactures.MouserManufacturerList?.Count === dbTableManufactures.length
-  }
-
-  private writeManufacturesToDb(mouserAndDbTableManufactures: MouserAndDbTableManufacturesObject | null) {
+  private writeManufactureNamesToDb(mouserManufactureNames: RequiredMouserManufacturerName[]) {
     // TODO: класс для ошибок
     // TODO: обработка ошибки БД
-    if (!mouserAndDbTableManufactures) return 'Количество записей в БД совпадает с количеством записей в Mouser'
 
-    const { mouserManufactures } = mouserAndDbTableManufactures
-    const manufacturesForDb = this.getManufacturesForDb(mouserManufactures ?? [])
-    return this.manufacturerListTableService.createMany(manufacturesForDb)
+    const manufacturesForDb = this.getManufacturesForDb(mouserManufactureNames);
+    return this.manufacturerListTableService.createMany(manufacturesForDb);
   }
 
-  private getManufacturesForDb(mouserManufactures: MouserManufacturerName[]): Prisma.ManufacturerListCreateInput[] {
-    return mouserManufactures?.map(({ ManufacturerName }) => ({ manufacturer_name: ManufacturerName ?? '', last_updated: this.getDateNow() }))
+  private getManufacturesForDb(
+    mouserManufactureNames: RequiredMouserManufacturerName[],
+  ): Prisma.ManufacturerListCreateInput[] {
+    return mouserManufactureNames?.map(({ ManufacturerName }) => ({
+      manufacturer_name: ManufacturerName,
+      last_updated: this.getDateNow(),
+    }));
   }
 
   // TODO: вынести в отдельную util либу
   // TODO: дата со временем
   private getDateNow(): Date {
-    return new Date()
+    return new Date();
   }
 }
