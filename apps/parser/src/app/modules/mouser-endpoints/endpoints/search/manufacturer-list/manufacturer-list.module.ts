@@ -1,14 +1,15 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 
 import { ManufacturerListApiController } from './manufacturer-list-api.controller';
 import { ManufacturerListApiService } from './manufacturer-list-api.service';
-import { MouserConnectionService } from '../../../services/mouser-connection.service';
+import { MouserConnectionModule } from '../../../../mouser-connection/mouser-connection.module';
 
 @Module({
-  imports: [HttpModule],
+  // TODO: удалить
+  imports: [HttpModule, MouserConnectionModule],
   controllers: [ManufacturerListApiController],
-  providers: [MouserConnectionService, ManufacturerListApiService],
+  providers: [ManufacturerListApiService],
   exports: [ManufacturerListApiService],
 })
 export class ManufacturerListModule {}

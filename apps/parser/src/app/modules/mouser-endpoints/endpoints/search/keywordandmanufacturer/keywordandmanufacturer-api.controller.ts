@@ -11,7 +11,8 @@ export class KeywordandmanufacturerApiController {
   constructor(private readonly keywordandmanufacturerApiService: KeywordandmanufacturerApiService) {}
 
   @Post()
-  getData(@Body() dto: KeywordandmanufacturerDto): Observable<SearchResponseRoot> {
+  // TODO: : Observable<SearchResponseRoot> !!!
+  getData(@Body() dto: KeywordandmanufacturerDto) {
     return this.keywordandmanufacturerApiService.postKeywordandmanufacturer(dto);
   }
 }

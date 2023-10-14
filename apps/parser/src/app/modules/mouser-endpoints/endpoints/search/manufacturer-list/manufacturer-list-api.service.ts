@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { map, Observable } from 'rxjs';
 
-import { MouserConnectionService } from '../../../services/mouser-connection.service';
+import { MouserConnectionService } from '../../../../mouser-connection/mouser-connection.service';
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { MANUFACTURER_LIST, SEARCH_BASE_ENDPOINT } from '../search-endpoint.consts';
 

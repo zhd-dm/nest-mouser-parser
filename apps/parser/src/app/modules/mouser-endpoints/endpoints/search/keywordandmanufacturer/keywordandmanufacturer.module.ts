@@ -3,12 +3,13 @@ import { HttpModule } from '@nestjs/axios';
 
 import { KeywordandmanufacturerApiService } from './keywordandmanufacturer-api.service';
 import { KeywordandmanufacturerApiController } from './keywordandmanufacturer-api.controller';
-import { MouserConnectionService } from '../../../services/mouser-connection.service';
+import { MouserConnectionModule } from '../../../../mouser-connection/mouser-connection.module';
 
 @Module({
-  imports: [HttpModule],
+  // TODO: удалить
+  imports: [HttpModule, MouserConnectionModule],
   controllers: [KeywordandmanufacturerApiController],
-  providers: [MouserConnectionService, KeywordandmanufacturerApiService],
-  exports: [KeywordandmanufacturerApiService]
+  providers: [KeywordandmanufacturerApiService],
+  exports: [KeywordandmanufacturerApiService],
 })
 export class KeywordandmanufacturerModule {}

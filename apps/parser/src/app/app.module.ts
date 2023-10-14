@@ -4,7 +4,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoints.module';
-import { DbDataHandlerModule } from './modules/db-data-handler/db-data-handler.module';
 
 @Module({
   imports: [
@@ -13,7 +12,7 @@ import { DbDataHandlerModule } from './modules/db-data-handler/db-data-handler.m
       isGlobal: true,
     }),
     MouserEndpointsModule,
-    DbDataHandlerModule,
+    // DbDataHandlerModule,
     // HtmlParserModule,
   ],
   controllers: [AppController],

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 
 import { ManufacturerNames, type Prisma } from '@prisma/client';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 
 @Injectable()
 export class ManufacturerNamesTableService {
