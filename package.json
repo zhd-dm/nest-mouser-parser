@@ -6,7 +6,8 @@
     "parser:start": "nx serve parser",
     "mouser:swaggerV1-generate": "openapi --input https://api.mouser.com/api/docs/V1 --output ./libs/mouser-swagger/src/lib/generated/v1 --client node --exportCore false --exportServices false --indent 2",
     "mouser:swaggerV2-generate": "openapi --input https://api.mouser.com/api/docs/V2 --output ./libs/mouser-swagger/src/lib/generated/v2 --client node --exportCore false --exportServices false --indent 2",
-    "prisma:migrate-dev": "npx prisma migrate dev"
+    "prisma:migrate-dev": "npx prisma migrate dev",
+    "prisma:generate": "npm prisma generate"
   },
   "private": true,
   "dependencies": {

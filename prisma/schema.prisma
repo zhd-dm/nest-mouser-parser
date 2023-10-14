@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_LOCAL_URL")
 }
 
-model ManufacturerList {
+model ManufacturerNames {
   automatically_id  Int      @id @default(autoincrement())
   manufacturer_name String   @unique @db.VarChar(100)
   last_updated      DateTime @db.Date

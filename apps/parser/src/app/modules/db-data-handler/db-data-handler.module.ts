@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { ManufacturerListTableModule } from './tables/manufacturer-list-table.module';
+import { ManufacturerNamesTableModule } from './tables/manufacturer-names-table.module';
 
 @Module({
-  imports: [ManufacturerListTableModule]
+  imports: [ManufacturerNamesTableModule]
 })
 export class DbDataHandlerModule {}
