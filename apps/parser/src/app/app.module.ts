@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoints.module';
 import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
+import { TestingEndpointModule } from './modules/_testing-endpoint/testing-endpoint.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
       isGlobal: true,
     }),
     RouterModule.register([
+      // TODO: поправить endpoint, сейчас без mouser-endpoints
       {
         path: 'mouser-endpoints',
         module: MouserEndpointsModule,
@@ -22,9 +24,14 @@ import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
         path: 'admin',
         module: AdminEndpointModule,
       },
+      {
+        path: 'testing',
+        module: TestingEndpointModule,
+      },
     ]),
     MouserEndpointsModule,
     AdminEndpointModule,
+    TestingEndpointModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
