@@ -1,5 +1,5 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { from, map, Observable } from 'rxjs';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { catchError, from, map, Observable } from 'rxjs';
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma/prisma.service';
@@ -24,7 +24,12 @@ export class AppAccountTableService {
   }
 
   createAccount(account: Prisma.AppAccountCreateInput): Observable<number> {
-    return from(this.prismaService.appAccount.create({ data: account })).pipe(map(dbResponse => dbResponse.account_id))
+    return from(this.prismaService.appAccount.create({ data: account })).pipe(
+      map(dbResponse => dbResponse.account_id),
+      catchError(dbResponse => {
+        throw new HttpException(dbResponse.name, HttpStatus.BAD_REQUEST);
+      }),
+    );
   }
 
   private getApiKeyResponse(accountApiKey: string | undefined): ResponseDto<string | undefined> {

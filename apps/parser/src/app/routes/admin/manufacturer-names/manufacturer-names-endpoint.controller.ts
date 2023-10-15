@@ -1,5 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
-import { combineLatest, forkJoin, of, switchMap } from 'rxjs';
+import { combineLatest, forkJoin, of, switchMap, tap } from 'rxjs';
 
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { Prisma } from '@prisma/client';

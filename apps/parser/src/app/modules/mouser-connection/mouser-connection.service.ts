@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, RequestMethod } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
@@ -31,7 +31,7 @@ export class MouserConnectionService {
     return this.appAccountTableService
       .getApiV2KeyByAccountId(accountId)
       .pipe(
-        this.checkDbStatusAndCallMouser<T, string | undefined, undefined>(endpoint, this.httpService.get<T>),
+        this.checkDbStatusAndCallMouser<T, string | undefined, undefined>(endpoint, RequestMethod.GET),
         this.checkMouserStatusAndWriteCallToDb<T>(accountId),
       );
   }
@@ -40,14 +40,14 @@ export class MouserConnectionService {
     return this.appAccountTableService
       .getApiV2KeyByAccountId(accountId)
       .pipe(
-        this.checkDbStatusAndCallMouser<T, string | undefined, Body>(endpoint, this.httpService.post<T>, body),
+        this.checkDbStatusAndCallMouser<T, string | undefined, Body>(endpoint, RequestMethod.POST, body),
         this.checkMouserStatusAndWriteCallToDb<T>(accountId),
       );
   }
 
   private checkDbStatusAndCallMouser<T, R extends string | undefined, Body>(
     endpoint: string,
-    cb: (url: string, body?: Body) => Observable<AxiosResponse<T>>,
+    method: RequestMethod,
     body?: Body,
   ): (source$: Observable<ResponseDto<R>>) => Observable<AxiosResponse<T>> {
     return source$ =>
@@ -55,7 +55,9 @@ export class MouserConnectionService {
         switchMap(apiKeyResponse => {
           if (apiKeyResponse?.status !== HttpStatus.OK)
             throw new HttpException(apiKeyResponse.message ?? '', apiKeyResponse.status);
-          return cb(this.getUrl(endpoint, apiKeyResponse?.data ?? ''), body);
+
+          const url = this.getUrl(endpoint, apiKeyResponse?.data ?? '');
+          return this.checkMethodAndCallHttp<T, Body>(method, url, body)
         }),
       );
   }
@@ -79,6 +81,17 @@ export class MouserConnectionService {
           return mouserResponseAndDbResponse[0];
         }),
       );
+  }
+
+  private checkMethodAndCallHttp<T, Body>(method: RequestMethod, url: string, body?: Body): Observable<AxiosResponse<T>> {
+    switch(method) {
+      case RequestMethod.GET:
+        return this.httpService.get<T>(url)
+      case RequestMethod.POST:
+        return this.httpService.post<T>(url, body)
+      default:
+        return this.httpService.get<T>(url)
+    }
   }
 
   private getUrl(endpoint: string, apiKey: string, apiVersion?: MouserApiVersion): string {

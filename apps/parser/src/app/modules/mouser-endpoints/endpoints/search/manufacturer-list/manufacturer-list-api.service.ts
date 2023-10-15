@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { MouserConnectionService } from '../../../../mouser-connection/mouser-connection.service';
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
