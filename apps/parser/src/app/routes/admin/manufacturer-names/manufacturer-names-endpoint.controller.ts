@@ -21,7 +21,7 @@ export class ManufacturerNamesEndpointController {
   // TODO: Responses !!!
   // TODO: status codes
   @Post()
-  updateManufactureNamesTable() {
+  updateManufacturerNames() {
     return forkJoin([
       this.manufacturerListApiService.getManufactures(),
       this.manufacturerNamesTableService.getManufacturesCount(),
