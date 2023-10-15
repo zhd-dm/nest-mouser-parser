@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import { map, Observable } from 'rxjs';
 
 import { MouserConnectionService } from '../../../../mouser-connection/mouser-connection.service';
@@ -9,13 +8,10 @@ import { KEYWORD_AND_MANUFACTURER, SEARCH_BASE_ENDPOINT } from '../search-endpoi
 
 @Injectable()
 export class KeywordandmanufacturerApiService {
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly mouserConnectionService: MouserConnectionService,
-  ) {}
+  constructor(private readonly mouserConnectionService: MouserConnectionService) {}
 
   // TODO: Observable<SearchResponseRoot> !!!!
-  postKeywordandmanufacturer(dto: KeywordandmanufacturerDto) {
+  postKeywordandmanufacturer(dto: KeywordandmanufacturerDto): Observable<SearchResponseRoot> {
     return this.mouserConnectionService
       .post<SearchResponseRoot, { SearchByKeywordMfrNameRequest: KeywordandmanufacturerDto }>(
         `${SEARCH_BASE_ENDPOINT}/${KEYWORD_AND_MANUFACTURER}`,
@@ -24,6 +20,6 @@ export class KeywordandmanufacturerApiService {
           SearchByKeywordMfrNameRequest: dto,
         },
       )
-      // .pipe(map(({ data }) => data));
+      .pipe(map(({ data }) => data));
   }
 }

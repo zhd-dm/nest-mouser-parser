@@ -1,18 +1,18 @@
 import { HttpStatus } from '@nestjs/common';
 
 export class ResponseDto<Data = unknown> {
-  public data?: Data | null;
-  public message?: string;
   public status: HttpStatus;
+  public message: string;
+  public data?: Data;
 
-  static generateResponse<Data = unknown>(status: HttpStatus, data?: Data, message?: string): ResponseDto<Data | null> {
-    return new ResponseDto(status, data, message);
+  static generateResponse<Data = unknown>(status: HttpStatus, message: string, data?: Data): ResponseDto<Data> {
+    return new ResponseDto(status, message, data);
   }
 
-  constructor(status: HttpStatus, data?: Data, message?: string) {
+  constructor(status: HttpStatus, message: string, data?: Data) {
     this.status = status
-    this.data = data;
     this.message = message;
+    this.data = data;
   }
 }
 
