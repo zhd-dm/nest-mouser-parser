@@ -1,5 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
-import { catchError, combineLatest, forkJoin, of, switchMap } from 'rxjs';
+import { combineLatest, forkJoin, of, switchMap } from 'rxjs';
 
 import { ManufacturerNamesTableService } from './manufacturer-names-table.service';
 import { ManufacturerListApiService } from '../../../../mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
@@ -7,7 +7,7 @@ import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { Prisma } from '@prisma/client';
 import { RequiredMouserManufacturerName } from './manufacturer-names-table.types';
 
-@Controller('admin/manufacturernames-table')
+@Controller('manufacturernames-table')
 export class ManufacturerNamesTableController {
   constructor(
     private readonly manufacturerNamesTableService: ManufacturerNamesTableService,
@@ -15,6 +15,7 @@ export class ManufacturerNamesTableController {
   ) {}
 
   // TODO: Responses !!!
+  // TODO: status codes
   @Post()
   updateManufactureNamesTable() {
     return forkJoin([
@@ -24,9 +25,10 @@ export class ManufacturerNamesTableController {
       switchMap(([mouserManufactures, dbManufacturesCount]) => {
         if (!this.isManufacturesAndCountNotEquals(mouserManufactures, dbManufacturesCount))
           return of('Нечего обновлять. Количество мануфактур равно.');
-        console.log(mouserManufactures, dbManufacturesCount)
-        const mouserManufactureNames = (mouserManufactures?.MouserManufacturerList?.ManufacturerList ?? []) as RequiredMouserManufacturerName[];
-        if (dbManufacturesCount === 0) return this.writeManufactureNamesToDb(mouserManufactureNames)
+
+        const mouserManufactureNames = (mouserManufactures?.MouserManufacturerList?.ManufacturerList ??
+          []) as RequiredMouserManufacturerName[];
+        if (dbManufacturesCount === 0) return this.writeManufactureNamesToDb(mouserManufactureNames);
 
         return combineLatest([
           this.manufacturerNamesTableService.truncateTable(),
