@@ -4,10 +4,10 @@ import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 
-import { AppAccountTableService } from '../db-data-handler/tables/app-account/app-account-table.service';
+import { AppAccountTableService } from '../db-data-handler/tables/application-configuration-tables/app-account/app-account-table.service';
 import {
   MouserAccountApiCallTableService
-} from '../db-data-handler/tables/mouser-account-api-call/mouser-account-api-call-table.service';
+} from '../db-data-handler/tables/application-configuration-tables/mouser-account-api-call/mouser-account-api-call-table.service';
 import { ResponseDto } from '../../abstract/response.dto';
 import { ResponseError } from '../../abstract/response.error';
 

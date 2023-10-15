@@ -2,7 +2,7 @@ import { Controller, Post } from '@nestjs/common';
 import { catchError, combineLatest, forkJoin, of, switchMap } from 'rxjs';
 
 import { ManufacturerNamesTableService } from './manufacturer-names-table.service';
-import { ManufacturerListApiService } from '../../../mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
+import { ManufacturerListApiService } from '../../../../mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { Prisma } from '@prisma/client';
 import { RequiredMouserManufacturerName } from './manufacturer-names-table.types';

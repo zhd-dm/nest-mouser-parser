@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { from, map, Observable } from 'rxjs';
 
-import { PrismaService } from '../../../prisma/prisma.service';
-import { ResponseDto } from '../../../../abstract/response.dto';
+import { PrismaService } from '../../../../prisma/prisma.service';
+import { ResponseDto } from '../../../../../abstract/response.dto';
 
 @Injectable()
 export class AppAccountTableService {
