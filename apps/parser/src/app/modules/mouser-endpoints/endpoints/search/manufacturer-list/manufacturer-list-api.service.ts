@@ -11,6 +11,7 @@ export class ManufacturerListApiService {
 
   getManufactures(): Observable<MouserManufacturersNameRoot> {
     return this.mouserConnectionService
+      // TODO: динамически подставлять айдишник
       .get<MouserManufacturersNameRoot>(`${SEARCH_BASE_ENDPOINT}/${MANUFACTURER_LIST}`, 1)
       .pipe(map(({ data }) => data));
   }

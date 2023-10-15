@@ -15,6 +15,7 @@ export class KeywordandmanufacturerApiService {
     return this.mouserConnectionService
       .post<SearchResponseRoot, { SearchByKeywordMfrNameRequest: KeywordandmanufacturerDto }>(
         `${SEARCH_BASE_ENDPOINT}/${KEYWORD_AND_MANUFACTURER}`,
+        // TODO: динамически подставлять айдишник
         1,
         {
           SearchByKeywordMfrNameRequest: dto,

@@ -3,7 +3,7 @@ import { from, Observable } from 'rxjs';
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { getNowDateISO } from '../../../../../utils/dates-transformer.utils';
+import { getNowDateISO } from '../../../../../utils/dates-transformer';
 
 @Injectable()
 export class MouserAccountApiCallTableService {

@@ -6,7 +6,7 @@ import { Prisma } from '@prisma/client';
 import { RequiredMouserManufacturerName } from './manufacturer-names-endpoint.types';
 import { ManufacturerNamesTableService } from '../../../modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.service';
 import { ManufacturerListApiService } from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
-import { getNowDateISO } from '../../../utils/dates-transformer.utils';
+import { getNowDateISO } from '../../../utils/dates-transformer';
 import { ResponseDto } from '../../../abstract/response.dto';
 
 @Controller('manufacturer-names')

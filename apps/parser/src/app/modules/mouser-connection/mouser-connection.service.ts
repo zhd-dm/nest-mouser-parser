@@ -13,7 +13,6 @@ import {
 import { ResponseDto } from '../../abstract/response.dto';
 import { MouserApiVersion } from '../../models/api-versions.enum';
 
-// TODO: check is singleton?
 @Injectable()
 export class MouserConnectionService {
   public readonly apiV1Url = this.configService.get<string>('MOUSER_API_V1_URL');
