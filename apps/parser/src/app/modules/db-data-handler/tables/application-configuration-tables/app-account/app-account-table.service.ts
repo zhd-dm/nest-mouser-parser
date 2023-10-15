@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { from, map, Observable } from 'rxjs';
+import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { ResponseDto } from '../../../../../abstract/response.dto';
@@ -20,6 +21,10 @@ export class AppAccountTableService {
       map(dbResponse => dbResponse?.account_second_api_key),
       map(accountApiKey => this.getApiKeyResponse(accountApiKey)),
     );
+  }
+
+  createAccount(account: Prisma.AppAccountCreateInput): Observable<number> {
+    return from(this.prismaService.appAccount.create({ data: account })).pipe(map(dbResponse => dbResponse.account_id))
   }
 
   private getApiKeyResponse(accountApiKey: string | undefined): ResponseDto<string | undefined> {

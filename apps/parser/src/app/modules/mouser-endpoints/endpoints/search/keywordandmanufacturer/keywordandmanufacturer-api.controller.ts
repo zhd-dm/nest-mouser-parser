@@ -11,6 +11,6 @@ export class KeywordandmanufacturerApiController {
 
   @Post()
   getData(@Body() dto: KeywordandmanufacturerDto): Observable<SearchResponseRoot> {
-    return this.keywordandmanufacturerApiService.postKeywordandmanufacturer(dto).pipe();
+    return this.keywordandmanufacturerApiService.postKeywordandmanufacturer(dto);
   }
 }

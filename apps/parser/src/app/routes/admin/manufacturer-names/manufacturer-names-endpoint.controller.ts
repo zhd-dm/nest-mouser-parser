@@ -1,14 +1,18 @@
 import { Controller, Post } from '@nestjs/common';
 import { combineLatest, forkJoin, of, switchMap } from 'rxjs';
 
-import { ManufacturerNamesTableService } from './manufacturer-names-table.service';
-import { ManufacturerListApiService } from '../../../../mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { Prisma } from '@prisma/client';
-import { RequiredMouserManufacturerName } from './manufacturer-names-table.types';
+import { RequiredMouserManufacturerName } from './manufacturer-names-endpoint.types';
+import {
+  ManufacturerNamesTableService
+} from '../../../modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.service';
+import {
+  ManufacturerListApiService
+} from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
 
-@Controller('manufacturernames-table')
-export class ManufacturerNamesTableController {
+@Controller('manufacturer-names')
+export class ManufacturerNamesEndpointController {
   constructor(
     private readonly manufacturerNamesTableService: ManufacturerNamesTableService,
     private readonly manufacturerListApiService: ManufacturerListApiService,

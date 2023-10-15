@@ -5,9 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoints.module';
-import {
-  ManufacturerNamesTableModule
-} from './modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.module';
+import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
 
 @Module({
   imports: [
@@ -18,15 +16,15 @@ import {
     RouterModule.register([
       {
         path: 'mouser-endpoints',
-        module: MouserEndpointsModule
+        module: MouserEndpointsModule,
       },
       {
         path: 'admin',
-        module: ManufacturerNamesTableModule
-      }
+        module: AdminEndpointModule,
+      },
     ]),
     MouserEndpointsModule,
-    ManufacturerNamesTableModule,
+    AdminEndpointModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
