@@ -24,7 +24,7 @@ model AppAccount {
 
 model MouserAccountApiCall {
   call_id              Int        @id @default(autoincrement())
-  call_time            DateTime   @db.Timestamp()
+  call_time            DateTime   @db.Timestamp() // TODO: DateTime	✔️	@db.Timestamptz(x)
   account              AppAccount @relation(fields: [appAccountAccount_id], references: [account_id])
   appAccountAccount_id Int
 }
@@ -34,7 +34,7 @@ model MouserAccountApiCall {
 model ManufacturerNames {
   automatically_id  Int      @id @default(autoincrement())
   manufacturer_name String   @unique @db.VarChar(100)
-  last_updated      DateTime @db.Date // TODO: timestamp	DateTime	✔️	@db.TimeStamp
+  last_updated      DateTime @db.Timestamp() // TODO: DateTime	✔️	@db.Timestamptz(x)
 }
 
 model ParsedProducts {

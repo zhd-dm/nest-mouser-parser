@@ -1,15 +1,13 @@
-import { Controller, Post } from '@nestjs/common';
-import { combineLatest, forkJoin, of, switchMap, tap } from 'rxjs';
+import { Controller, HttpException, HttpStatus, Put } from '@nestjs/common';
+import { combineLatest, forkJoin, from, map, Observable, switchMap } from 'rxjs';
 
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { Prisma } from '@prisma/client';
 import { RequiredMouserManufacturerName } from './manufacturer-names-endpoint.types';
-import {
-  ManufacturerNamesTableService
-} from '../../../modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.service';
-import {
-  ManufacturerListApiService
-} from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
+import { ManufacturerNamesTableService } from '../../../modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.service';
+import { ManufacturerListApiService } from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
+import { getNowDateISO } from '../../../utils/dates-transformer.utils';
+import { ResponseDto } from '../../../abstract/response.dto';
 
 @Controller('manufacturer-names')
 export class ManufacturerNamesEndpointController {
@@ -18,9 +16,7 @@ export class ManufacturerNamesEndpointController {
     private readonly manufacturerListApiService: ManufacturerListApiService,
   ) {}
 
-  // TODO: Responses !!!
-  // TODO: status codes
-  @Post()
+  @Put()
   updateManufacturerNames() {
     return forkJoin([
       this.manufacturerListApiService.getManufactures(),
@@ -28,7 +24,7 @@ export class ManufacturerNamesEndpointController {
     ]).pipe(
       switchMap(([mouserManufactures, dbManufacturesCount]) => {
         if (!this.isManufacturesAndCountNotEquals(mouserManufactures, dbManufacturesCount))
-          return of('Нечего обновлять. Количество мануфактур равно.');
+          throw new HttpException('Нечего обновлять. Количество мануфактур равно.', HttpStatus.ACCEPTED);
 
         const mouserManufactureNames = (mouserManufactures?.MouserManufacturerList?.ManufacturerList ??
           []) as RequiredMouserManufacturerName[];
@@ -52,26 +48,23 @@ export class ManufacturerNamesEndpointController {
     );
   }
 
-  private writeManufactureNamesToDb(mouserManufactureNames: RequiredMouserManufacturerName[]) {
-    // TODO: класс для ошибок
-    // TODO: обработка ошибки БД
-
-    const manufacturesForDb = this.getManufacturesForDb(mouserManufactureNames);
-    return this.manufacturerNamesTableService.createMany(manufacturesForDb);
+  private writeManufactureNamesToDb(
+    mouserManufactureNames: RequiredMouserManufacturerName[],
+  ): Observable<ResponseDto<number>> {
+    const manufacturesForDb = this.prepareManufacturesForDb(mouserManufactureNames);
+    return from(this.manufacturerNamesTableService.createMany(manufacturesForDb)).pipe(
+      map(dbResponse =>
+        ResponseDto.generateResponse(HttpStatus.OK, 'Записи успешно созданы в количестве:', dbResponse.count),
+      ),
+    );
   }
 
-  private getManufacturesForDb(
+  private prepareManufacturesForDb(
     mouserManufactureNames: RequiredMouserManufacturerName[],
   ): Prisma.ManufacturerNamesCreateInput[] {
     return mouserManufactureNames?.map(({ ManufacturerName }) => ({
       manufacturer_name: ManufacturerName,
-      last_updated: this.getDateNow(),
+      last_updated: getNowDateISO(),
     }));
-  }
-
-  // TODO: вынести в отдельную util либу
-  // TODO: дата со временем
-  private getDateNow(): Date {
-    return new Date();
   }
 }
