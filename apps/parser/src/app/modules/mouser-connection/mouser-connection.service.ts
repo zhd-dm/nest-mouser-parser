@@ -4,14 +4,12 @@ import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 
-import {
-  AppAccountTableService
-} from '../db-data-handler/tables/application-configuration-tables/app-account/app-account-table.service';
-import {
-  MouserAccountApiCallTableService
-} from '../db-data-handler/tables/application-configuration-tables/mouser-account-api-call/mouser-account-api-call-table.service';
+import { AppAccountTableService } from '../db-data-handler/tables/application-configuration-tables/app-account/app-account-table.service';
+import { MouserAccountApiCallTableService } from '../db-data-handler/tables/application-configuration-tables/mouser-account-api-call/mouser-account-api-call-table.service';
 import { ResponseDto } from '../../abstract/response.dto';
 import { MouserApiVersion } from '../../models/api-versions.enum';
+import { MouserApiKeyGetterService } from './services/mouser-api-key-getter.service';
+import { catchAndThrowException } from '../../utils';
 
 @Injectable()
 export class MouserConnectionService {
@@ -23,6 +21,7 @@ export class MouserConnectionService {
     private readonly httpService: HttpService,
     private readonly appAccountTableService: AppAccountTableService,
     private readonly mouserAccountApiCallTableService: MouserAccountApiCallTableService,
+    private readonly mouserApiKeyGetterService: MouserApiKeyGetterService,
   ) {}
 
   get<T>(endpoint: string, accountId: number): Observable<AxiosResponse<T>> {
@@ -31,6 +30,7 @@ export class MouserConnectionService {
       .pipe(
         this.checkDbStatusAndCallMouser<T, string | undefined, undefined>(endpoint, RequestMethod.GET),
         this.checkMouserStatusAndWriteCallToDb<T>(accountId),
+        catchAndThrowException()
       );
   }
 
@@ -40,6 +40,7 @@ export class MouserConnectionService {
       .pipe(
         this.checkDbStatusAndCallMouser<T, string | undefined, Body>(endpoint, RequestMethod.POST, body),
         this.checkMouserStatusAndWriteCallToDb<T>(accountId),
+        catchAndThrowException()
       );
   }
 
@@ -55,7 +56,7 @@ export class MouserConnectionService {
             throw new HttpException(apiKeyResponse.message ?? '', apiKeyResponse.status);
 
           const url = this.getUrl(endpoint, apiKeyResponse?.data ?? '');
-          return this.checkMethodAndCallHttp<T, Body>(method, url, body)
+          return this.checkMethodAndCallHttp<T, Body>(method, url, body);
         }),
       );
   }
@@ -72,23 +73,29 @@ export class MouserConnectionService {
 
           return combineLatest([
             of(mouserResponse),
-            this.mouserAccountApiCallTableService.writeCall(accountId).pipe(map(dbResponse => dbResponse.call_time)),
+            this.mouserAccountApiCallTableService.writeCall(accountId).pipe(
+              map(dbResponse => dbResponse.call_time),
+              catchAndThrowException(),
+            ),
           ]);
         }),
-        map(mouserResponseAndDbResponse => {
-          return mouserResponseAndDbResponse[0];
-        }),
+        map(mouserResponseAndDbResponse => mouserResponseAndDbResponse[0]),
+        catchAndThrowException()
       );
   }
 
-  private checkMethodAndCallHttp<T, Body>(method: RequestMethod, url: string, body?: Body): Observable<AxiosResponse<T>> {
-    switch(method) {
+  private checkMethodAndCallHttp<T, Body>(
+    method: RequestMethod,
+    url: string,
+    body?: Body,
+  ): Observable<AxiosResponse<T>> {
+    switch (method) {
       case RequestMethod.GET:
-        return this.httpService.get<T>(url)
+        return this.httpService.get<T>(url);
       case RequestMethod.POST:
-        return this.httpService.post<T>(url, body)
+        return this.httpService.post<T>(url, body);
       default:
-        return this.httpService.get<T>(url)
+        return this.httpService.get<T>(url);
     }
   }
 

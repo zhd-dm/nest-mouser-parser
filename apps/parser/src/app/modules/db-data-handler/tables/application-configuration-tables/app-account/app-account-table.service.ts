@@ -1,39 +1,65 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { catchError, from, map, Observable, tap } from 'rxjs';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { from, map, Observable, tap } from 'rxjs';
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { ResponseDto } from '../../../../../abstract/response.dto';
-import { getStartTodayDateISO, getEndTodayDateISO } from '../../../../../utils/dates-transformer';
+import { catchAndThrowException, getEndTodayDateISO, getStartTodayDateISO } from '../../../../../utils';
 
 @Injectable()
 export class AppAccountTableService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  getAccountIds(): Observable<ResponseDto<number[] | undefined>> {
-    return from(this.prismaService.appAccount.findMany()).pipe(
-      map(dbResponse => dbResponse.map(account => account.account_id)),
-      map(accountIds => ResponseDto.generateResponse(HttpStatus.OK, 'Найденные аккаунты:', accountIds)),
+  // TODO: return type
+  getAccountIds(): Observable<ResponseDto<{ account_id: number }[]>> {
+    return from(
+      this.prismaService.appAccount.findMany({
+        select: { account_id: true },
+      }),
+    ).pipe(
+      map(dbResponse => ResponseDto.generateResponse(HttpStatus.OK, 'Найденные аккаунты:', dbResponse)),
+      catchAndThrowException(),
     );
   }
 
   // TODO: получить accountId с которого можно сделать запрос
-  // getAvailableAccountId() {
-  //   return from(
-  //     // this.prismaService.appAccount.findFirst({
-  //     //   select: { account_id: true },
-  //     //   where: {
-  //     //     MouserAccountApiCall: {  call_time: { gt: getPureTodayDayDateISO(), lt: getPureNextDayDateISO() } },
-  //     //   },
-  //     // }),
-  //     // .findFirst({ include: { MouserAccountApiCall: { select: { call_time: true } } } })
-  //     // .findFirst({ select: { account_id: true } })
-  //     // .MouserAccountApiCall({ select: { call_time: true } }),
-  //   ).pipe(tap(console.log));
-  // }
+  getAvailableAccountId() {
+    return from(
+      // this.prismaService.appAccount.findMany({
+      //   where: {
+      //     MouserAccountApiCall: {
+      //       some: {
+      //         AND: [
+      //           { call_time: { gt: getStartTodayDateISO(), lt: getEndTodayDateISO() } },
+      //           { MouserAccountApiCall: {} }
+      //           // { call_time: { lt: getEndTodayDateISO() } }
+      //         ]
+      //       }
+      //     },
+      //     // _count: {
+      //     //   MouserAccountApiCall: { lt: 1000 }
+      //     // }
+      //   },
+      //   select: {
+      //     account_id: true
+      //   }
+      // })
+      this.prismaService.appAccount.findMany({
+        where: {
+          MouserAccountApiCall: {
+            some: {
+              call_time: { gt: getStartTodayDateISO(), lt: getEndTodayDateISO() },
+            },
+          },
+        },
+        select: { account_id: true },
+      }),
+    ).pipe(tap(console.log), catchAndThrowException());
+  }
 
   // TODO: вроде работает правильно
-  getHowManyCallsAccountMakeToday(accountId: number): Observable<number> {
+  // TODO: возвращает 0, а не undefined если нет такого аккаунта в БД
+  getHowManyCallsAccountMakeToday(accountId: number): Observable<ResponseDto<number>> {
     return from(
       this.prismaService.mouserAccountApiCall.count({
         where: {
@@ -41,7 +67,12 @@ export class AppAccountTableService {
           AND: { call_time: { gt: getStartTodayDateISO(), lt: getEndTodayDateISO() } },
         },
       }),
-    )
+    ).pipe(
+      map(dbResponse =>
+        ResponseDto.generateResponse(HttpStatus.OK, 'Количество запросов к Mouser сегодня:', dbResponse),
+      ),
+      catchAndThrowException(),
+    );
   }
 
   getApiV2KeyByAccountId(accountId: number): Observable<ResponseDto<string | undefined>> {
@@ -53,16 +84,15 @@ export class AppAccountTableService {
     ).pipe(
       map(dbResponse => dbResponse?.account_second_api_key),
       map(accountApiKey => this.getApiKeyResponse(accountApiKey)),
+      catchAndThrowException(),
     );
   }
 
   createAccount(account: Prisma.AppAccountCreateInput): Observable<ResponseDto<number>> {
     return from(this.prismaService.appAccount.create({ data: account })).pipe(
       map(dbResponse => dbResponse.account_id),
-      map(accountId => ResponseDto.generateResponse(HttpStatus.OK, `Id созданного аккаунта: ${accountId}`, accountId)),
-      catchError(dbResponse => {
-        throw new HttpException(dbResponse.name, HttpStatus.BAD_REQUEST);
-      }),
+      map(accountId => ResponseDto.generateResponse(HttpStatus.OK, `Id созданного аккаунта:`, accountId)),
+      catchAndThrowException(),
     );
   }
 

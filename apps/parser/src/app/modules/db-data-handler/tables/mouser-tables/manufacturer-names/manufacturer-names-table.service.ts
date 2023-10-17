@@ -3,6 +3,7 @@ import { from, Observable } from 'rxjs';
 
 import { ManufacturerNames, type Prisma } from '@prisma/client';
 import { PrismaService } from '../../../../prisma/prisma.service';
+import { catchAndThrowException } from '../../../../../utils';
 
 @Injectable()
 export class ManufacturerNamesTableService {
@@ -10,15 +11,15 @@ export class ManufacturerNamesTableService {
 
   // TODO: return value
   create(manufacture: Prisma.ManufacturerNamesCreateInput) {
-    return this.prismaService.manufacturerNames.create({ data: manufacture });
+    return from(this.prismaService.manufacturerNames.create({ data: manufacture })).pipe(catchAndThrowException())
   }
 
   createMany(manufactures: Prisma.ManufacturerNamesCreateInput[]) {
-    return this.prismaService.manufacturerNames.createMany({ data: manufactures })
+    return from(this.prismaService.manufacturerNames.createMany({ data: manufactures })).pipe(catchAndThrowException())
   }
 
   getAll(): Observable<ManufacturerNames[]> {
-    return from(this.prismaService.manufacturerNames.findMany());
+    return from(this.prismaService.manufacturerNames.findMany()).pipe(catchAndThrowException())
   }
 
   // getBy(): any {}
@@ -28,11 +29,11 @@ export class ManufacturerNamesTableService {
   // delete(): any {}
 
   getManufacturesCount(): Observable<number> {
-    return from(this.prismaService.manufacturerNames.count());
+    return from(this.prismaService.manufacturerNames.count()).pipe(catchAndThrowException());
   }
 
   truncateTable(): Observable<Prisma.BatchPayload> {
     // TODO: truncate
-    return from(this.prismaService.manufacturerNames.deleteMany({ where: {}}))
+    return from(this.prismaService.manufacturerNames.deleteMany({ where: {}})).pipe(catchAndThrowException())
   }
 }

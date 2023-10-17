@@ -8,6 +8,7 @@ import { ManufacturerNamesTableService } from '../../../modules/db-data-handler/
 import { ManufacturerListApiService } from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
 import { getNowDateISO } from '../../../utils/dates-transformer';
 import { ResponseDto } from '../../../abstract/response.dto';
+import { catchAndThrowException } from '../../../utils';
 
 @Controller('manufacturer-names')
 export class ManufacturerNamesEndpointController {
@@ -56,6 +57,7 @@ export class ManufacturerNamesEndpointController {
       map(dbResponse =>
         ResponseDto.generateResponse(HttpStatus.OK, 'Записи успешно созданы в количестве:', dbResponse.count),
       ),
+      catchAndThrowException()
     );
   }
 

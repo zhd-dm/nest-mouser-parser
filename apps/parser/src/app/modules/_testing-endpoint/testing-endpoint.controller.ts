@@ -13,6 +13,11 @@ export class TestingEndpointController {
 
   @Get('how-many-calls-account-make-today')
   getHowManyCallsAccountMakeToday() {
-    return this.appAccountTableService.getHowManyCallsAccountMakeToday(1)
+    return this.appAccountTableService.getHowManyCallsAccountMakeToday(1232)
+  }
+
+  @Get('account-ids')
+  getAccountIds() {
+    return this.appAccountTableService.getAccountIds()
   }
 }

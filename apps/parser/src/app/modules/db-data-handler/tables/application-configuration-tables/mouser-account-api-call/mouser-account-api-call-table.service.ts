@@ -3,7 +3,7 @@ import { from, Observable } from 'rxjs';
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { getNowDateISO } from '../../../../../utils/dates-transformer';
+import { catchAndThrowException, getNowDateISO } from '../../../../../utils';
 
 @Injectable()
 export class MouserAccountApiCallTableService {
@@ -12,6 +12,6 @@ export class MouserAccountApiCallTableService {
   writeCall(accountId: number): Observable<Prisma.MouserAccountApiCallUncheckedCreateInput> {
     return from(this.prismaService.mouserAccountApiCall.create({
       data: { call_time: getNowDateISO(), appAccountAccount_id: accountId },
-    }));
+    })).pipe(catchAndThrowException());
   }
 }

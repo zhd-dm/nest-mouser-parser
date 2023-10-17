@@ -4,6 +4,7 @@ import { map, Observable, tap } from 'rxjs';
 import { MouserConnectionService } from '../../../../mouser-connection/mouser-connection.service';
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { MANUFACTURER_LIST, SEARCH_BASE_ENDPOINT } from '../search-endpoint.consts';
+import { catchAndThrowException } from '../../../../../utils';
 
 @Injectable()
 export class ManufacturerListApiService {
@@ -13,6 +14,6 @@ export class ManufacturerListApiService {
     return this.mouserConnectionService
       // TODO: динамически подставлять айдишник
       .get<MouserManufacturersNameRoot>(`${SEARCH_BASE_ENDPOINT}/${MANUFACTURER_LIST}`, 1)
-      .pipe(map(({ data }) => data));
+      .pipe(map(({ data }) => data), catchAndThrowException());
   }
 }

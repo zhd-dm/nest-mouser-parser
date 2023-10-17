@@ -5,6 +5,7 @@ import { MouserConnectionService } from '../../../../mouser-connection/mouser-co
 import { SearchResponseRoot } from '@mouser-swagger/v2';
 import { KeywordandmanufacturerDto } from './keywordandmanufacturer.dto';
 import { KEYWORD_AND_MANUFACTURER, SEARCH_BASE_ENDPOINT } from '../search-endpoint.consts';
+import { catchAndThrowException } from '../../../../../utils';
 
 @Injectable()
 export class KeywordandmanufacturerApiService {
@@ -21,6 +22,6 @@ export class KeywordandmanufacturerApiService {
           SearchByKeywordMfrNameRequest: dto,
         },
       )
-      .pipe(map(({ data }) => data));
+      .pipe(map(({ data }) => data), catchAndThrowException());
   }
 }
