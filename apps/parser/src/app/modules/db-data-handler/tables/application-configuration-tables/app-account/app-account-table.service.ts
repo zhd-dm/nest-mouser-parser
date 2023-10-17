@@ -5,13 +5,19 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { ResponseDto } from '../../../../../abstract/response.dto';
 import { catchAndThrowException, getEndTodayDateISO, getStartTodayDateISO } from '../../../../../utils';
+import {
+  CreateAccountReturn,
+  GetAccountIdsReturn,
+  GetApiV2KeyByAccountIdReturn,
+  GetHowManyCallsAccountMakeTodayReturn
+} from './app-account-table.return-types';
 
 @Injectable()
 export class AppAccountTableService {
   constructor(private readonly prismaService: PrismaService) {}
 
   // TODO: return type
-  getAccountIds(): Observable<ResponseDto<{ account_id: number }[]>> {
+  getAccountIds(): Observable<GetAccountIdsReturn> {
     return from(
       this.prismaService.appAccount.findMany({
         select: { account_id: true },
@@ -59,7 +65,7 @@ export class AppAccountTableService {
 
   // TODO: вроде работает правильно
   // TODO: возвращает 0, а не undefined если нет такого аккаунта в БД
-  getHowManyCallsAccountMakeToday(accountId: number): Observable<ResponseDto<number>> {
+  getHowManyCallsAccountMakeToday(accountId: number): Observable<GetHowManyCallsAccountMakeTodayReturn> {
     return from(
       this.prismaService.mouserAccountApiCall.count({
         where: {
@@ -75,7 +81,7 @@ export class AppAccountTableService {
     );
   }
 
-  getApiV2KeyByAccountId(accountId: number): Observable<ResponseDto<string | undefined>> {
+  getApiV2KeyByAccountId(accountId: number): Observable<GetApiV2KeyByAccountIdReturn> {
     return from(
       this.prismaService.appAccount.findFirst({
         where: { account_id: accountId },
@@ -88,7 +94,7 @@ export class AppAccountTableService {
     );
   }
 
-  createAccount(account: Prisma.AppAccountCreateInput): Observable<ResponseDto<number>> {
+  createAccount(account: Prisma.AppAccountCreateInput): Observable<CreateAccountReturn> {
     return from(this.prismaService.appAccount.create({ data: account })).pipe(
       map(dbResponse => dbResponse.account_id),
       map(accountId => ResponseDto.generateResponse(HttpStatus.OK, `Id созданного аккаунта:`, accountId)),
