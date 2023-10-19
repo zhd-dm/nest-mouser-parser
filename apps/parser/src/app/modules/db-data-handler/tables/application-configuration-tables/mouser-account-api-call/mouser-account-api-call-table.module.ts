@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { MouserAccountApiCallTableService } from './mouser-account-api-call-table.service';
-import { PrismaService } from '../../../../prisma/prisma.service';
+import { PrismaModule } from '../../../../prisma/prisma.module';
 
 @Module({
-  providers: [PrismaService, MouserAccountApiCallTableService],
+  imports: [PrismaModule],
+  providers: [MouserAccountApiCallTableService],
   exports: [MouserAccountApiCallTableService]
 })
 export class MouserAccountApiCallTableModule {}
