@@ -9,7 +9,7 @@ import {
   CreateAccountReturn,
   GetAccountIdsReturn,
   GetApiV2KeyByAccountIdReturn,
-  GetHowManyCallsAccountMakeTodayReturn
+  GetHowManyCallsAccountMakeTodayReturn,
 } from './app-account-table.return-types';
 
 @Injectable()
@@ -29,39 +29,40 @@ export class AppAccountTableService {
   }
 
   // TODO: получить accountId с которого можно сделать запрос
-  getAvailableAccountId() {
-    return from(
-      // this.prismaService.appAccount.findMany({
-      //   where: {
-      //     MouserAccountApiCall: {
-      //       some: {
-      //         AND: [
-      //           { call_time: { gt: getStartTodayDateISO(), lt: getEndTodayDateISO() } },
-      //           { MouserAccountApiCall: {} }
-      //           // { call_time: { lt: getEndTodayDateISO() } }
-      //         ]
-      //       }
-      //     },
-      //     // _count: {
-      //     //   MouserAccountApiCall: { lt: 1000 }
-      //     // }
-      //   },
-      //   select: {
-      //     account_id: true
-      //   }
-      // })
-      this.prismaService.appAccount.findMany({
-        where: {
-          MouserAccountApiCall: {
-            some: {
-              call_time: { gt: getStartTodayDateISO(), lt: getEndTodayDateISO() },
-            },
-          },
-        },
-        select: { account_id: true },
-      }),
-    ).pipe(tap(console.log), catchAndThrowException());
-  }
+  // getAvailableAccountId() {
+  //   return from(
+  //     // this.prismaService.appAccount.findMany({
+  //     //   where: {
+  //     //     MouserAccountApiCall: {
+  //     //       some: {
+  //     //         AND: [
+  //     //           { call_time: { gt: getStartTodayDateISO(), lt: getEndTodayDateISO() } },
+  //     //           { MouserAccountApiCall: {} }
+  //     //           // { call_time: { lt: getEndTodayDateISO() } }
+  //     //         ]
+  //     //       }
+  //     //     },
+  //     //     // _count: {
+  //     //     //   MouserAccountApiCall: { lt: 1000 }
+  //     //     // }
+  //     //   },
+  //     //   select: {
+  //     //     account_id: true
+  //     //   }
+  //     // })
+  //
+  //     this.prismaService.appAccount.findMany({
+  //       where: {
+  //         MouserAccountApiCall: {
+  //           some: {
+  //             call_time: { gt: getStartTodayDateISO(), lt: getEndTodayDateISO() },
+  //           },
+  //         },
+  //       },
+  //       select: { account_id: true },
+  //     }),
+  //   ).pipe(tap(console.log), catchAndThrowException());
+  // }
 
   // TODO: вроде работает правильно
   // TODO: возвращает 0, а не undefined если нет такого аккаунта в БД
