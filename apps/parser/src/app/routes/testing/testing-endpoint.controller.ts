@@ -8,7 +8,7 @@ export class TestingEndpointController {
 
   @Get('available-account-id')
   getAvailableAccountId() {
-    return this.appAccountTableService.getAvailableAccountId()
+    // return this.appAccountTableService.getAvailableAccountId()
   }
 
   @Get('how-many-calls-account-make-today')
