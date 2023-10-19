@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 import { Prisma } from '@prisma/client';
 
-import { PrismaService } from '../../../../prisma/prisma.service';
-import { catchAndThrowException, getNowDateISO } from '../../../../../utils';
+import { PrismaService } from '../../../../../core/prisma/prisma.service';
+import { catchAndThrowException, getNowDateISO } from '../../../../../core/utils';
 
 @Injectable()
 export class MouserAccountApiCallTableService {

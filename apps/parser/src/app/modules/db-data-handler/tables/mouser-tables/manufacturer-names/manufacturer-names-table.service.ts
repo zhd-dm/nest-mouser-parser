@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 
 import { ManufacturerNames, type Prisma } from '@prisma/client';
-import { PrismaService } from '../../../../prisma/prisma.service';
-import { catchAndThrowException } from '../../../../../utils';
+import { PrismaService } from '../../../../../core/prisma/prisma.service';
+import { catchAndThrowException } from '../../../../../core/utils';
 
 @Injectable()
 export class ManufacturerNamesTableService {

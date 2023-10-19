@@ -6,8 +6,8 @@ import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 
 import { AppAccountTableService } from '../db-data-handler/tables/application-configuration-tables/app-account/app-account-table.service';
 import { MouserAccountApiCallTableService } from '../db-data-handler/tables/application-configuration-tables/mouser-account-api-call/mouser-account-api-call-table.service';
-import { ResponseDto } from '../../abstract/response.dto';
-import { MouserApiVersion } from '../../models';
+import { ResponseDto } from '../../core/abstract/response.dto';
+import { MouserApiVersion } from '../../core/models';
 
 @Injectable()
 export class MouserConnectionService {

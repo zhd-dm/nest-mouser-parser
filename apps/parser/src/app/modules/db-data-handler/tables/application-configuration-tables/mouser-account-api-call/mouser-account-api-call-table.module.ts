@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { MouserAccountApiCallTableService } from './mouser-account-api-call-table.service';
-import { PrismaModule } from '../../../../prisma/prisma.module';
+import { PrismaModule } from '../../../../../core/prisma/prisma.module';
 
 @Module({
   imports: [PrismaModule],

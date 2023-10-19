@@ -6,8 +6,8 @@ import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { RequiredMouserManufacturerName } from './manufacturer-names-endpoint.types';
 import { ManufacturerNamesTableService } from '../../../modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.service';
 import { ManufacturerListApiService } from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
-import { getNowDateISO, catchAndThrowException } from '../../../utils';
-import { ResponseDto } from '../../../abstract/response.dto';
+import { getNowDateISO, catchAndThrowException } from '../../../core/utils';
+import { ResponseDto } from '../../../core/abstract/response.dto';
 
 @Controller('manufacturer-names')
 export class ManufacturerNamesEndpointController {

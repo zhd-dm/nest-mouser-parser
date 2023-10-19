@@ -1,4 +1,4 @@
-import { ResponseDto } from '../../../../../abstract/response.dto';
+import { ResponseDto } from '../../../../../core/abstract/response.dto';
 
 export type GetAccountIdsReturn = ResponseDto<{ account_id: number }[]>
 

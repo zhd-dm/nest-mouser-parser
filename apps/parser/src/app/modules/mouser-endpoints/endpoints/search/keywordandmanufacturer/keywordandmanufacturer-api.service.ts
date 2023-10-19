@@ -4,8 +4,8 @@ import { map, Observable } from 'rxjs';
 import { MouserConnectionService } from '../../../../mouser-connection/mouser-connection.service';
 import { SearchResponseRoot } from '@mouser-swagger/v2';
 import { KEYWORD_AND_MANUFACTURER, SEARCH_BASE_ENDPOINT } from '../search-endpoint.consts';
-import { catchAndThrowException } from '../../../../../utils';
-import { ManufacturersBodyDto } from '../../../../../models';
+import { catchAndThrowException } from '../../../../../core/utils';
+import { ManufacturersBodyDto } from '../../../../../core/models';
 
 @Injectable()
 export class KeywordandmanufacturerApiService {

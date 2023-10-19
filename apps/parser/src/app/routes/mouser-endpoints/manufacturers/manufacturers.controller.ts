@@ -2,7 +2,7 @@ import { Body, Controller, ParseIntPipe, Post, Query } from '@nestjs/common';
 import {
   KeywordandmanufacturerApiService
 } from '../../../modules/mouser-endpoints/endpoints/search/keywordandmanufacturer/keywordandmanufacturer-api.service';
-import { ManufacturersBodyDto } from '../../../models';
+import { ManufacturersBodyDto } from '../../../core/models';
 import { Observable } from 'rxjs';
 import { SearchResponseRoot } from '@mouser-swagger/v2';
 
