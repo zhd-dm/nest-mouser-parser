@@ -27,18 +27,14 @@ export function getPureDate(
   const year = getYearNumber(date);
   const month = getMonthNumber(date);
   const day = getDayNumber(date);
-  const hours = getHours(date);
-  const minutes = getMinutes(date);
-  const seconds = getSeconds(date);
-  const milliseconds = getMilliseconds(date);
   const pureDate = new Date(date);
 
   pureDate.setFullYear(year);
   pureDate.setMonth(month);
   pureDate.setDate(day);
-  pureDate.setHours(options.includeHours ? hours : 0);
-  pureDate.setMinutes(options.includeMinutes ? minutes : 0);
-  pureDate.setSeconds(options.includeSeconds ? seconds : 0);
-  pureDate.setMilliseconds(options.includeMilliseconds ? milliseconds : 0);
+  pureDate.setHours(options.includeHours ? getHours(date) : 0);
+  pureDate.setMinutes(options.includeMinutes ? getMinutes(date) : 0);
+  pureDate.setSeconds(options.includeSeconds ? getSeconds(date) : 0);
+  pureDate.setMilliseconds(options.includeMilliseconds ? getMilliseconds(date) : 0);
   return pureDate;
 }
