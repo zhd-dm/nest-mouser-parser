@@ -1,20 +1,20 @@
 import { Body, Controller, ParseIntPipe, Post, Query } from '@nestjs/common';
+import {
+  KeywordandmanufacturerApiService
+} from '../../../modules/mouser-endpoints/endpoints/search/keywordandmanufacturer/keywordandmanufacturer-api.service';
+import {
+  ManufacturersBodyDto
+} from './dto/manufacturers-body.dto';
 import { Observable } from 'rxjs';
-
-import { KeywordandmanufacturerApiService } from './keywordandmanufacturer-api.service';
-import { KeywordandmanufacturerBodyDto } from './dto/keywordandmanufacturer.body-dto';
 import { SearchResponseRoot } from '@mouser-swagger/v2';
 
-@Controller('keywordandmanufacturer')
-export class KeywordandmanufacturerApiController {
+@Controller('manufacturers')
+export class ManufacturersController {
   constructor(private readonly keywordandmanufacturerApiService: KeywordandmanufacturerApiService) {}
 
-  /**
-   * @deprecated Нужно контроллер перенести в `routes`
-   */
   @Post()
   getData(
-    @Body() bodyDto: KeywordandmanufacturerBodyDto,
+    @Body() bodyDto: ManufacturersBodyDto,
     @Query('accountId', ParseIntPipe) accountId: number,
   ): Observable<SearchResponseRoot> {
     return this.keywordandmanufacturerApiService.postKeywordandmanufacturer(bodyDto, accountId);

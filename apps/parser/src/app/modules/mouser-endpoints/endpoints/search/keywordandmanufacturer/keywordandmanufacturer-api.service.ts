@@ -3,7 +3,7 @@ import { map, Observable } from 'rxjs';
 
 import { MouserConnectionService } from '../../../../mouser-connection/mouser-connection.service';
 import { SearchResponseRoot } from '@mouser-swagger/v2';
-import { KeywordandmanufacturerBodyDto } from './dto/keywordandmanufacturer.body-dto';
+import { ManufacturersBodyDto } from '../../../../../routes/admin/manufacturers/dto/manufacturers-body.dto';
 import { KEYWORD_AND_MANUFACTURER, SEARCH_BASE_ENDPOINT } from '../search-endpoint.consts';
 import { catchAndThrowException } from '../../../../../utils';
 
@@ -11,10 +11,9 @@ import { catchAndThrowException } from '../../../../../utils';
 export class KeywordandmanufacturerApiService {
   constructor(private readonly mouserConnectionService: MouserConnectionService) {}
 
-  // TODO: Observable<SearchResponseRoot> !!!!
-  postKeywordandmanufacturer(dto: KeywordandmanufacturerBodyDto, accountId: number): Observable<SearchResponseRoot> {
+  postKeywordandmanufacturer(dto: ManufacturersBodyDto, accountId: number): Observable<SearchResponseRoot> {
     return this.mouserConnectionService
-      .post<SearchResponseRoot, { SearchByKeywordMfrNameRequest: KeywordandmanufacturerBodyDto }>(
+      .post<SearchResponseRoot, { SearchByKeywordMfrNameRequest: ManufacturersBodyDto }>(
         `${SEARCH_BASE_ENDPOINT}/${KEYWORD_AND_MANUFACTURER}`,
         accountId,
         {

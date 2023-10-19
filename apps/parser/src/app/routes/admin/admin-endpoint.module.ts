@@ -7,6 +7,10 @@ import { ManufacturerNamesEndpointController } from './manufacturer-names/manufa
 import {
   ManufacturerListModule
 } from '../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list.module';
+import { ManufacturersController } from './manufacturers/manufacturers.controller';
+import {
+  KeywordandmanufacturerModule
+} from '../../modules/mouser-endpoints/endpoints/search/keywordandmanufacturer/keywordandmanufacturer.module';
 
 @Module({
   imports: [
@@ -15,7 +19,9 @@ import {
     // manufacturer-names
     ManufacturerNamesTableModule,
     ManufacturerListModule,
+    // manufacturers
+    KeywordandmanufacturerModule
   ],
-  controllers: [AppAccountEndpointController, ManufacturerNamesEndpointController],
+  controllers: [AppAccountEndpointController, ManufacturerNamesEndpointController, ManufacturersController],
 })
 export class AdminEndpointModule {}

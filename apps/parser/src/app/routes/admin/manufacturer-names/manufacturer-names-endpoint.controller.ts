@@ -1,4 +1,4 @@
-import { Controller, HttpException, HttpStatus, ParseIntPipe, Put, Query } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, ParseIntPipe, Put, Query } from '@nestjs/common';
 import { combineLatest, forkJoin, from, map, Observable, switchMap } from 'rxjs';
 import { Prisma } from '@prisma/client';
 
@@ -15,6 +15,11 @@ export class ManufacturerNamesEndpointController {
     private readonly manufacturerNamesTableService: ManufacturerNamesTableService,
     private readonly manufacturerListApiService: ManufacturerListApiService,
   ) {}
+
+  @Get()
+  getData(@Query('accountId', ParseIntPipe) accountId: number): Observable<MouserManufacturersNameRoot> {
+    return this.manufacturerListApiService.getManufactures(accountId);
+  }
 
   @Put()
   updateManufacturerNames(@Query('accountId', ParseIntPipe) accountId: number) {

@@ -4,7 +4,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoints.module';
 import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
 import { TestingEndpointModule } from './routes/testing/testing-endpoint.module';
 
@@ -15,11 +14,6 @@ import { TestingEndpointModule } from './routes/testing/testing-endpoint.module'
       isGlobal: true,
     }),
     RouterModule.register([
-      // TODO: поправить endpoint, сейчас без mouser-endpoints
-      {
-        path: 'mouser-endpoints',
-        module: MouserEndpointsModule,
-      },
       {
         path: 'admin',
         module: AdminEndpointModule,
@@ -29,7 +23,6 @@ import { TestingEndpointModule } from './routes/testing/testing-endpoint.module'
         module: TestingEndpointModule,
       },
     ]),
-    MouserEndpointsModule,
     AdminEndpointModule,
     TestingEndpointModule,
   ],

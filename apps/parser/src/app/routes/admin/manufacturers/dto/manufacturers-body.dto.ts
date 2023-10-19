@@ -2,7 +2,7 @@ import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
 
 import { SearchByKeywordMfrNameRequest } from '@mouser-swagger/v2';
 
-export class KeywordandmanufacturerBodyDto implements SearchByKeywordMfrNameRequest{
+export class ManufacturersBodyDto implements SearchByKeywordMfrNameRequest{
   @IsNotEmpty()
   @IsString()
   manufacturerName = '';
