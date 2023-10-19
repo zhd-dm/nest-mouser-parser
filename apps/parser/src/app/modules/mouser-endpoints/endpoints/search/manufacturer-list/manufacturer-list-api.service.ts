@@ -10,10 +10,9 @@ import { catchAndThrowException } from '../../../../../utils';
 export class ManufacturerListApiService {
   constructor(private readonly mouserConnectionService: MouserConnectionService) {}
 
-  getManufactures(): Observable<MouserManufacturersNameRoot> {
+  getManufactures(accountId: number): Observable<MouserManufacturersNameRoot> {
     return this.mouserConnectionService
-      // TODO: динамически подставлять айдишник
-      .get<MouserManufacturersNameRoot>(`${SEARCH_BASE_ENDPOINT}/${MANUFACTURER_LIST}`, 1)
+      .get<MouserManufacturersNameRoot>(`${SEARCH_BASE_ENDPOINT}/${MANUFACTURER_LIST}`, accountId)
       .pipe(map(({ data }) => data), catchAndThrowException());
   }
 }

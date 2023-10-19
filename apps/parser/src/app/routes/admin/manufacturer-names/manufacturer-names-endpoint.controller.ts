@@ -1,14 +1,13 @@
-import { Controller, HttpException, HttpStatus, Put } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, ParseIntPipe, Put, Query } from '@nestjs/common';
 import { combineLatest, forkJoin, from, map, Observable, switchMap } from 'rxjs';
+import { Prisma } from '@prisma/client';
 
 import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
-import { Prisma } from '@prisma/client';
 import { RequiredMouserManufacturerName } from './manufacturer-names-endpoint.types';
 import { ManufacturerNamesTableService } from '../../../modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.service';
 import { ManufacturerListApiService } from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
-import { getNowDateISO } from '../../../utils/dates-transformer';
+import { getNowDateISO, catchAndThrowException } from '../../../utils';
 import { ResponseDto } from '../../../abstract/response.dto';
-import { catchAndThrowException } from '../../../utils';
 
 @Controller('manufacturer-names')
 export class ManufacturerNamesEndpointController {
@@ -18,9 +17,9 @@ export class ManufacturerNamesEndpointController {
   ) {}
 
   @Put()
-  updateManufacturerNames() {
+  updateManufacturerNames(@Query('accountId', ParseIntPipe) accountId: number) {
     return forkJoin([
-      this.manufacturerListApiService.getManufactures(),
+      this.manufacturerListApiService.getManufactures(accountId),
       this.manufacturerNamesTableService.getManufacturesCount(),
     ]).pipe(
       switchMap(([mouserManufactures, dbManufacturesCount]) => {
