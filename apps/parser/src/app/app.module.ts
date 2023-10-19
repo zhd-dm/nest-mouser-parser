@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
 import { TestingEndpointModule } from './routes/testing/testing-endpoint.module';
 import { MouserEndpointsModule } from './routes/mouser-endpoints/mouser-endpoints.module';
@@ -32,7 +30,6 @@ import { MouserEndpointsModule } from './routes/mouser-endpoints/mouser-endpoint
     MouserEndpointsModule,
     TestingEndpointModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [ConfigService],
 })
 export class AppModule {}
