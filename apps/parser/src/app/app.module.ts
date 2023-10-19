@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
 import { TestingEndpointModule } from './routes/testing/testing-endpoint.module';
+import { MouserEndpointsModule } from './routes/mouser-endpoints/mouser-endpoints.module';
 
 @Module({
   imports: [
@@ -19,11 +20,16 @@ import { TestingEndpointModule } from './routes/testing/testing-endpoint.module'
         module: AdminEndpointModule,
       },
       {
+        path: 'mouser-endpoints',
+        module: MouserEndpointsModule,
+      },
+      {
         path: 'testing',
         module: TestingEndpointModule,
       },
     ]),
     AdminEndpointModule,
+    MouserEndpointsModule,
     TestingEndpointModule,
   ],
   controllers: [AppController],
