@@ -7,13 +7,13 @@ import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { AppAccountTableService } from '../db-data-handler/tables/application-configuration-tables/app-account/app-account-table.service';
 import { MouserAccountApiCallTableService } from '../db-data-handler/tables/application-configuration-tables/mouser-account-api-call/mouser-account-api-call-table.service';
 import { ResponseDto } from '../../abstract/response.dto';
-import { MouserApiVersion } from '../../models/api-versions.enum';
-import { MouserApiKeyGetterService } from './services/mouser-api-key-getter.service';
-import { catchAndThrowException } from '../../utils';
+import { MouserApiVersion } from '../../models';
 
 @Injectable()
 export class MouserConnectionService {
+  /** @deprecated */
   public readonly apiV1Url = this.configService.get<string>('MOUSER_API_V1_URL');
+  /** @deprecated */
   public readonly apiV2Url = this.configService.get<string>('MOUSER_API_V2_URL');
 
   constructor(
@@ -21,7 +21,6 @@ export class MouserConnectionService {
     private readonly httpService: HttpService,
     private readonly appAccountTableService: AppAccountTableService,
     private readonly mouserAccountApiCallTableService: MouserAccountApiCallTableService,
-    private readonly mouserApiKeyGetterService: MouserApiKeyGetterService,
   ) {}
 
   get<T>(endpoint: string, accountId: number): Observable<AxiosResponse<T>> {
@@ -30,7 +29,6 @@ export class MouserConnectionService {
       .pipe(
         this.checkDbStatusAndCallMouser<T, string | undefined, undefined>(endpoint, RequestMethod.GET),
         this.checkMouserStatusAndWriteCallToDb<T>(accountId),
-        catchAndThrowException()
       );
   }
 
@@ -40,7 +38,6 @@ export class MouserConnectionService {
       .pipe(
         this.checkDbStatusAndCallMouser<T, string | undefined, Body>(endpoint, RequestMethod.POST, body),
         this.checkMouserStatusAndWriteCallToDb<T>(accountId),
-        catchAndThrowException()
       );
   }
 
@@ -73,14 +70,10 @@ export class MouserConnectionService {
 
           return combineLatest([
             of(mouserResponse),
-            this.mouserAccountApiCallTableService.writeCall(accountId).pipe(
-              map(dbResponse => dbResponse.call_time),
-              catchAndThrowException(),
-            ),
+            this.mouserAccountApiCallTableService.writeCall(accountId).pipe(map(dbResponse => dbResponse.call_time)),
           ]);
         }),
         map(mouserResponseAndDbResponse => mouserResponseAndDbResponse[0]),
-        catchAndThrowException()
       );
   }
 
