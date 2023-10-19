@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
 
-@Module({})
+import { ParserLauncherService } from './services/parser-launcher-service';
+
+@Module({
+  providers: [ParserLauncherService]
+})
 export class ManufacturersParserSyncModule {}
