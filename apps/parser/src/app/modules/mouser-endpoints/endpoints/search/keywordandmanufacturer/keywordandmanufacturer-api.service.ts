@@ -3,9 +3,9 @@ import { map, Observable } from 'rxjs';
 
 import { MouserConnectionService } from '../../../../mouser-connection/mouser-connection.service';
 import { SearchResponseRoot } from '@mouser-swagger/v2';
-import { ManufacturersBodyDto } from '../../../../../routes/admin/manufacturers/dto/manufacturers-body.dto';
 import { KEYWORD_AND_MANUFACTURER, SEARCH_BASE_ENDPOINT } from '../search-endpoint.consts';
 import { catchAndThrowException } from '../../../../../utils';
+import { ManufacturersBodyDto } from '../../../../../models';
 
 @Injectable()
 export class KeywordandmanufacturerApiService {
@@ -20,6 +20,6 @@ export class KeywordandmanufacturerApiService {
           SearchByKeywordMfrNameRequest: dto,
         },
       )
-      .pipe(map(({ data }) => data), catchAndThrowException());
+      .pipe(map(({ data }) => data), catchAndThrowException())
   }
 }

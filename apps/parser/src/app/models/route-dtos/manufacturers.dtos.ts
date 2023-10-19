@@ -1,6 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
-
 import { SearchByKeywordMfrNameRequest } from '@mouser-swagger/v2';
+import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
 
 export class ManufacturersBodyDto implements SearchByKeywordMfrNameRequest{
   @IsNotEmpty()
