@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { AppAccountTableService } from '../db-data-handler/tables/application-configuration-tables/app-account/app-account-table.service';
+import { AppAccountTableService } from '../../modules/db-data-handler/tables/application-configuration-tables/app-account/app-account-table.service';
 
 @Controller()
 export class TestingEndpointController {

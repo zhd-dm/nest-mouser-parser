@@ -6,7 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MouserEndpointsModule } from './modules/mouser-endpoints/mouser-endpoints.module';
 import { AdminEndpointModule } from './routes/admin/admin-endpoint.module';
-import { TestingEndpointModule } from './modules/_testing-endpoint/testing-endpoint.module';
+import { TestingEndpointModule } from './routes/testing/testing-endpoint.module';
 
 @Module({
   imports: [
