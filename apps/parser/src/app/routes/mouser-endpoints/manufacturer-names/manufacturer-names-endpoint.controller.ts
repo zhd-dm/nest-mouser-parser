@@ -6,7 +6,7 @@ import { MouserManufacturersNameRoot } from '@mouser-swagger/v2';
 import { RequiredMouserManufacturerName } from './manufacturer-names-endpoint.types';
 import { ManufacturerNamesTableService } from '../../../modules/db-data-handler/tables/mouser-tables/manufacturer-names/manufacturer-names-table.service';
 import { ManufacturerListApiService } from '../../../modules/mouser-endpoints/endpoints/search/manufacturer-list/manufacturer-list-api.service';
-import { getNowDateISO, catchAndThrowException } from '../../../core/utils';
+import { catchAndThrowException, getNowDateISO } from '../../../core/utils';
 import { ResponseDto } from '../../../core/abstract/response.dto';
 
 @Controller('manufacturer-names')
@@ -28,7 +28,7 @@ export class ManufacturerNamesEndpointController {
       this.manufacturerNamesTableService.getManufacturesCount(),
     ]).pipe(
       switchMap(([mouserManufactures, dbManufacturesCount]) => {
-        if (!this.isManufacturesAndCountNotEquals(mouserManufactures, dbManufacturesCount))
+        if (this.isManufacturesCountEquals(mouserManufactures, dbManufacturesCount))
           throw new HttpException('Нечего обновлять. Количество мануфактур равно.', HttpStatus.ACCEPTED);
 
         const mouserManufactureNames = (mouserManufactures?.MouserManufacturerList?.ManufacturerList ??
@@ -43,11 +43,11 @@ export class ManufacturerNamesEndpointController {
     );
   }
 
-  private isManufacturesAndCountNotEquals(
+  private isManufacturesCountEquals(
     mouserManufactures: MouserManufacturersNameRoot,
     dbManufacturesCount: number,
   ): boolean {
-    return !(
+    return (
       !!mouserManufactures.MouserManufacturerList &&
       mouserManufactures.MouserManufacturerList?.Count === dbManufacturesCount
     );
@@ -61,7 +61,7 @@ export class ManufacturerNamesEndpointController {
       map(dbResponse =>
         ResponseDto.generateResponse(HttpStatus.OK, 'Записи успешно созданы в количестве:', dbResponse.count),
       ),
-      catchAndThrowException()
+      catchAndThrowException(),
     );
   }
 
